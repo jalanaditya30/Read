@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#111827" />
+  <meta name="description" content="Free offline-friendly stock research text-to-speech reader with Smart and Word-for-Word modes." />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" href="icon.svg" type="image/svg+xml" />
+  <title>Market Research Reader</title>
+  <style>
+    :root{--bg:#f6f7f9;--card:#fff;--text:#111827;--muted:#6b7280;--border:#d1d5db;--accent:#111827;--accent2:#2563eb;--good:#047857;--warn:#b45309}
+    *{box-sizing:border-box} body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}
+    .wrap{max-width:900px;margin:auto;padding:18px} h1{font-size:1.55rem;margin:0 0 6px}.sub{color:var(--muted);margin-bottom:18px}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;margin-bottom:14px}
+    textarea{width:100%;min-height:260px;border:1px solid var(--border);border-radius:12px;padding:14px;font-size:16px;line-height:1.5;resize:vertical}
+    textarea:focus,select:focus,input:focus,button:focus{outline:3px solid rgba(37,99,235,.18);outline-offset:2px}.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    .mode-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.mode{border:1px solid var(--border);border-radius:12px;padding:12px;cursor:pointer}.mode input{margin-right:8px}.mode small{display:block;color:var(--muted);margin:5px 0 0 25px;line-height:1.35}
+    label{font-weight:650}select,input[type="range"]{font-size:16px}select{width:100%;padding:11px;border:1px solid var(--border);border-radius:10px;background:#fff}
+    .controls{display:grid;grid-template-columns:1.2fr 1fr 1fr 1fr;gap:8px;margin-top:14px}button{border:none;border-radius:11px;padding:13px 14px;font-size:16px;font-weight:700;cursor:pointer;min-height:48px}button.primary{background:var(--accent);color:#fff}button.secondary{background:#eef2f7;color:var(--text);border:1px solid var(--border)}button.danger{background:#fee2e2;color:#991b1b}button:disabled{opacity:.5;cursor:not-allowed}
+    .meta{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;color:var(--muted);font-size:.92rem;margin-top:8px}.status{margin-top:12px;padding:11px 12px;border-radius:10px;background:#f3f4f6;color:#374151;min-height:44px}.now{font-size:1.06rem;line-height:1.55}.summary{white-space:pre-wrap;line-height:1.6}.hidden{display:none}.progress{height:8px;background:#e5e7eb;border-radius:999px;overflow:hidden;margin-top:12px}.bar{height:100%;width:0;background:var(--accent2);transition:width .2s}.pill{font-size:.8rem;padding:4px 8px;border-radius:999px;background:#eef2ff;color:#3730a3}footer{color:var(--muted);font-size:.85rem;text-align:center;padding:8px 0 24px}
+    @media(max-width:640px){.mode-grid{grid-template-columns:1fr}.controls{grid-template-columns:1fr 1fr}.wrap{padding:12px}textarea{min-height:230px}}
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <h1>Market Research Reader</h1>
+    <div class="sub">Free stock-research reader. No AI, no account, no API key.</div>
+    <section class="card"><label for="sourceText">Paste article or research notes</label><textarea id="sourceText" placeholder="Paste research report, earnings notes, broker article, concall summary, etc."></textarea><div class="meta"><span id="wordCount">0 words</span><span id="readTime">~0 min at 1×</span></div></section>
+    <section class="card"><div class="mode-grid"><label class="mode"><input type="radio" name="mode" value="smart" checked />Smart Mode<small>Local extractive summary. Keeps numbers, growth, margins, debt, capex, guidance, risks and catalysts.</small></label><label class="mode"><input type="radio" name="mode" value="exact" />Word-for-Word<small>Reads everything you pasted, in order.</small></label></div></section>
+    <section class="card"><div class="row"><div style="flex:1;min-width:220px"><label for="voice">Voice</label><select id="voice"><option>Loading voices…</option></select></div><div style="flex:1;min-width:220px"><label for="speed">Speed: <span id="speedValue">1.0×</span></label><input id="speed" type="range" min="0.7" max="2" step="0.1" value="1" style="width:100%;margin-top:12px" /></div></div>
+      <div class="controls"><button id="playBtn" class="primary">▶ Play</button><button id="pauseBtn" class="secondary">⏸ Pause</button><button id="backBtn" class="secondary">↶ 15 sec</button><button id="forwardBtn" class="secondary">15 sec ↷</button><button id="stopBtn" class="danger">■ Stop</button><button id="previewBtn" class="secondary">Smart Preview</button><button id="clearBtn" class="secondary">Clear</button><button id="installBtn" class="secondary hidden">Install App</button></div>
+      <div class="progress"><div id="progressBar" class="bar"></div></div><div id="status" class="status" aria-live="polite">Ready.</div></section>
+    <section id="currentCard" class="card hidden"><div class="row" style="justify-content:space-between"><strong>Now reading</strong><span id="chunkTag" class="pill"></span></div><div id="nowReading" class="now"></div></section>
+    <section id="summaryCard" class="card hidden"><strong>Smart Mode preview</strong><div id="summaryText" class="summary"></div></section>
+    <footer>Speech is generated by your device's own TTS engine. Nothing is uploaded anywhere.</footer>
+  </main>
+<script src="app.js"></script>
+</body>
+</html>
